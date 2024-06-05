@@ -1,22 +1,31 @@
 import './App.css'
 import {Todo} from "./type/Todo.ts";
 import TodoCard from "./component/TodoCard.tsx";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 function App() {
 
-    //---data for the test, before connect to the backend!---
-    const todos: Todo[] = [
-        {
-            "id": "Id1",
-            "description": "Cook dinner",
-            "status": "OPEN"
-        },
-        {
-            "id": "Id2",
-            "description": "House Cleaning",
-            "status": "IN_PROGRESS"
-        },
-    ]
+    //const [todos, setTodos] = useState<Todo[]>([])
+
+    //if initial state is "undefined", then return "loading..."
+    const [todos, setTodos] = useState<Todo[]>()
+
+    //all "react Hook" must be before the "return"!!!!
+    useEffect(() => {
+        axios.get("api/todo")
+            .then((response) => {setTodos(response.data)})
+            .catch((error)=>{console.log(error)})
+            .finally(() =>{console.log("finally-get")})
+    }, []);
+
+
+    //all "react Hook" must be before the "return"!!!!
+    if(!todos){
+        return ("Loading...")
+    }
 
 
   return (
@@ -29,6 +38,7 @@ function App() {
 
     </>
   )
+
 }
 
 export default App

@@ -1,10 +1,11 @@
 import './App.css'
 import {Todo} from "./type/Todo.ts";
-import TodoCard from "./component/TodoCard.tsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
+import TodoColumn from "./component/TodoColumn.tsx";
+import {allPossibleTodos} from "./type/TodoStatus.ts";
+
+
 
 function App() {
 
@@ -30,11 +31,16 @@ function App() {
 
   return (
     <>
-        <h1>TODOs</h1>
-        {
-            todos.map((todo) => <TodoCard todo={todo}  key={todo.id} />)
-        }
+        <div className="page">
+            <h1>TODOs</h1>
 
+            {
+                allPossibleTodos.map((status) => {
+                    const filteredTodos = todos.filter(todo => todo.status === status )
+                    return <TodoColumn status={status} todos={filteredTodos} key={status} />
+                })
+            }
+        </div>
 
     </>
   )

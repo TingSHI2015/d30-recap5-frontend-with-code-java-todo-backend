@@ -1,0 +1,8 @@
+.todo-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 20px;
+    margin: 20px;
+
+}

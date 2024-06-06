@@ -14,12 +14,16 @@ function App() {
     //if initial state is "undefined", then return "loading..."
     const [todos, setTodos] = useState<Todo[]>()
 
-    //all "react Hook" must be before the "return"!!!!
-    useEffect(() => {
+    const fetchTodos = ()=>{
         axios.get("api/todo")
             .then((response) => {setTodos(response.data)})
             .catch((error)=>{console.log(error)})
             .finally(() =>{console.log("finally-get")})
+    }
+
+    //all "react Hook" must be before the "return"!!!!
+    useEffect(() => {
+        fetchTodos()
     }, []);
 
 
@@ -37,7 +41,7 @@ function App() {
             {
                 allPossibleTodos.map((status) => {
                     const filteredTodos = todos.filter(todo => todo.status === status )
-                    return <TodoColumn status={status} todos={filteredTodos} key={status} />
+                    return <TodoColumn status={status} todos={filteredTodos} key={status} onNewTodoItemSaved={fetchTodos} />
                 })
             }
         </div>

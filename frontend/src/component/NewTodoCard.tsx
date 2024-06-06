@@ -4,7 +4,7 @@ import {ChangeEvent, useState} from "react";
 
 type NewTodoCardProps={
     //todo: Todo,
-    onNewTodoItemSaved:()=>void,
+    onTodoItemChange:()=>void,
 }
 
 export default function NewTodoCard(props: NewTodoCardProps){
@@ -20,7 +20,7 @@ export default function NewTodoCard(props: NewTodoCardProps){
             description: text,
             status: "OPEN"
         } as Todo)
-            .then(props.onNewTodoItemSaved)
+            .then(props.onTodoItemChange)
             .catch(error => {console.log(error)})
             .finally(()=>console.log("Finally-Post"))
     }

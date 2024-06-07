@@ -2,6 +2,7 @@ import {Todo} from "../type/Todo.ts";
 import './TodoCard.css'
 import axios from "axios";
 import {ChangeEvent, useState} from "react";
+import {TodoStatus} from "../type/TodoStatus.ts";
 
 type TodoCardProps = {
     todo: Todo,
@@ -24,13 +25,20 @@ export default function TodoCard(props: TodoCardProps){
         const newDescription = event.target.value
         setDescription(newDescription)
         axios.put("api/todo/" + props.todo.id, {
-            id: props.todo.id,
+            ...props.todo,
             description:newDescription,
-            status: props.todo.status,
             } as Todo)
             .then(props.onTodoItemChange)
             .catch(error => console.log(error))
             .finally(()=>"Finally-Put")
+    }
+
+    const move =(targetStatus: TodoStatus)=>{
+        axios.put("api/todo/" + props.todo.id,{
+            ...props.todo,
+            status: targetStatus} as Todo)
+            .then(props.onTodoItemChange)
+
     }
 
 
@@ -38,6 +46,27 @@ export default function TodoCard(props: TodoCardProps){
         <div className="todo-card">
             <input value={description} onInput={changeText}/>
             <button onClick={deleteThisItem}>🚮</button>
+
+            {
+                props.todo.status === "OPEN" ?
+                    <div></div> :
+                    (
+                        props.todo.status === "IN_PROGRESS" ?
+                            <button onClick={() => move("OPEN")}>⬅️</button> :
+                            <button onClick={() => move("IN_PROGRESS")}>⬅️</button>
+                    )
+            }
+
+            {
+                props.todo.status === "DONE" ?
+                    <div></div> :
+                    (
+                        props.todo.status === "OPEN" ?
+                            <button onClick={() => move("IN_PROGRESS")}>➡️</button> :
+                            <button onClick={() => move("DONE")}>➡️</button>
+
+                    )
+            }
         </div>
     )
 }
